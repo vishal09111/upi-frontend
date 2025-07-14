@@ -107,6 +107,10 @@ function AddTransaction({ onSuccess }) {
         color: "#fff",
       }}
     >
+        {/* ✅ Add this test heading here */}
+    <h2 style={{ textAlign: "center", color: "lime" }}>
+      🔁 Updated AddTransaction UI - {new Date().toLocaleDateString()}
+    </h2>
       <h2 style={{ textAlign: "center" }}>➕ Add UPI Transaction</h2>
       <form onSubmit={handleSubmit}>
         {Object.keys(formData).map((key) => {
