@@ -55,7 +55,7 @@ function AddTransaction({ onSuccess }) {
     setLoading(true);
 
     try {
-      await axios.post("https://upitransaction.onrender.com/upi/add", formData, {
+      await axios.post("https://upitransaction.onrender.com/upi/add-transaction", formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -107,6 +107,7 @@ function AddTransaction({ onSuccess }) {
         color: "#fff",
       }}
     >
+  
       <h2 style={{ textAlign: "center" }}>➕ Add UPI Transaction</h2>
       <form onSubmit={handleSubmit}>
         {Object.keys(formData).map((key) => {
