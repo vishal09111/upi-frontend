@@ -60,7 +60,7 @@ const handleAddClick = () => {
 
   const fetchTransactions = async () => {
     try {
-      const response = await axios.get("https://upitransaction.onrender.com/", {
+      const response = await axios.get("https://upitransaction.onrender.com/upi", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const sorted = response.data.sort((a, b) => new Date(b.Date) - new Date(a.Date));
@@ -81,7 +81,7 @@ const handleAddClick = () => {
 
   const handleEditSubmit = async () => {
     try {
-      await axios.put(`https://upitransaction.onrender.com/upi/${editingId}`, editForm, {
+      await axios.put(`https://upitransaction.onrender.com/upi${editingId}`, editForm, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setEditingId(null);
@@ -217,60 +217,83 @@ const handleAddClick = () => {
       )}
 
       <table className="dashboard-table" id="transaction-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Date</th>
-            <th>Sender</th>
-            <th>Receiver</th>
-            <th>Amount</th>
-            <th>Purpose</th>
-            <th>Status</th>
-            {isAdmin && <th>Action</th>}
-          </tr>
-        </thead>
-        <tbody>
-          {transactions
-            .filter((txn) =>
-              isAdmin ?
-                Object.values(txn).some((val) =>
-                  String(val).toLowerCase().includes(searchTerm.toLowerCase())
-                ) : true
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Date</th>
+      <th>Sender Bank</th>
+      <th>Receiver Bank</th>
+      <th>Amount</th>
+      <th>Purpose</th>
+      <th>Gender</th>
+      <th>Payment App</th>
+      <th>Payment Gateway</th>
+      <th>Device Type</th>
+      <th>Age</th>
+      <th>Status</th>
+      <th>Sender Name</th>
+      <th>Receiver Name</th>
+      {isAdmin && <th>Action</th>}
+    </tr>
+  </thead>
+  <tbody>
+    {transactions
+      .filter((txn) =>
+        isAdmin
+          ? Object.values(txn).some((val) =>
+              String(val).toLowerCase().includes(searchTerm.toLowerCase())
             )
-            .map((txn) =>
-              editingId === txn.Upi_Transaction_Id ? (
-                <tr key={txn.Upi_Transaction_Id}>
-                  <td>{txn.Upi_Transaction_Id}</td>
-                  <td><input name="Date" value={editForm.Date} onChange={handleEditChange} /></td>
-                  <td><input name="Sender_Bank" value={editForm.Sender_Bank} onChange={handleEditChange} /></td>
-                  <td><input name="Reciever_bank" value={editForm.Reciever_bank} onChange={handleEditChange} /></td>
-                  <td><input name="Amount_transferd" value={editForm.Amount_transferd} onChange={handleEditChange} /></td>
-                  <td><input name="Purpose" value={editForm.Purpose} onChange={handleEditChange} /></td>
-                  <td><input name="Status" value={editForm.Status} onChange={handleEditChange} /></td>
-                  <td>
-                    <button className="save-btn" onClick={handleEditSubmit}>💾 Save</button>
-                    <button className="cancel-btn" onClick={() => setEditingId(null)}>❌ Cancel</button>
-                  </td>
-                </tr>
-              ) : (
-                <tr key={txn.Upi_Transaction_Id}>
-                  <td>{txn.Upi_Transaction_Id}</td>
-                  <td>{txn.Date}</td>
-                  <td>{txn.Sender_Bank}</td>
-                  <td>{txn.Reciever_bank}</td>
-                  <td>{txn.Amount_transferd}</td>
-                  <td>{txn.Purpose}</td>
-                  <td>{txn.Status}</td>
-                  {isAdmin && (
-                    <td>
-                      <button className="edit-btn" onClick={() => handleEdit(txn)}>✏️ Edit</button>
-                    </td>
-                  )}
-                </tr>
-              )
+          : true
+      )
+      .map((txn) =>
+        editingId === txn.Upi_Transaction_Id ? (
+          <tr key={txn.Upi_Transaction_Id}>
+            <td>{txn.Upi_Transaction_Id}</td>
+            <td><input name="Date" value={editForm.Date} onChange={handleEditChange} /></td>
+            <td><input name="Sender_Bank" value={editForm.Sender_Bank} onChange={handleEditChange} /></td>
+            <td><input name="Reciever_bank" value={editForm.Reciever_bank} onChange={handleEditChange} /></td>
+            <td><input name="Amount_transferd" value={editForm.Amount_transferd} onChange={handleEditChange} /></td>
+            <td><input name="Purpose" value={editForm.Purpose} onChange={handleEditChange} /></td>
+            <td><input name="Gender" value={editForm.Gender} onChange={handleEditChange} /></td>
+            <td><input name="Payment_app" value={editForm.Payment_app} onChange={handleEditChange} /></td>
+            <td><input name="Payment_Gateway" value={editForm.Payment_Gateway} onChange={handleEditChange} /></td>
+            <td><input name="Device_type" value={editForm.Device_type} onChange={handleEditChange} /></td>
+            <td><input name="Age" value={editForm.Age} onChange={handleEditChange} /></td>
+            <td><input name="Status" value={editForm.Status} onChange={handleEditChange} /></td>
+            <td>{txn.Sender_Name}</td> {/* Not editable */}
+            <td><input name="Receiver_Name" value={editForm.Receiver_Name} onChange={handleEditChange} /></td>
+            <td>
+              <button className="save-btn" onClick={handleEditSubmit}>💾 Save</button>
+              <button className="cancel-btn" onClick={() => setEditingId(null)}>❌ Cancel</button>
+            </td>
+          </tr>
+        ) : (
+          <tr key={txn.Upi_Transaction_Id}>
+            <td>{txn.Upi_Transaction_Id}</td>
+            <td>{txn.Date}</td>
+            <td>{txn.Sender_Bank}</td>
+            <td>{txn.Reciever_bank}</td>
+            <td>{txn.Amount_transferd}</td>
+            <td>{txn.Purpose}</td>
+            <td>{txn.Gender}</td>
+            <td>{txn.Payment_app}</td>
+            <td>{txn.Payment_Gateway}</td>
+            <td>{txn.Device_type}</td>
+            <td>{txn.Age}</td>
+            <td>{txn.Status}</td>
+            <td>{txn.Sender_Name}</td>
+            <td>{txn.Receiver_Name}</td>
+            {isAdmin && (
+              <td>
+                <button className="edit-btn" onClick={() => handleEdit(txn)}>✏️ Edit</button>
+              </td>
             )}
-        </tbody>
-      </table>
+          </tr>
+        )
+      )}
+  </tbody>
+</table>
+
     </div>
   );
 }
